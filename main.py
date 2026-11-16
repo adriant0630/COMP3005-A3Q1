@@ -8,6 +8,7 @@ def getAllStudents(conn):
 
             students = cursor.fetchall()
 
+            print("Students List:")
             for student in students:
                 print(
                     f"ID: {student[0]}, "
@@ -15,7 +16,7 @@ def getAllStudents(conn):
                     f"Email: {student[3]}, "
                     f"Enrollment Date: {student[4]}"
                 )
-            print("\n")
+            print("")
 
     except psycopg2.Error as error:
         conn.rollback()
@@ -26,12 +27,23 @@ def addStudent(conn, first_name, last_name, email, enrollment_date):
         with conn.cursor() as cursor:
             cursor.execute("INSERT INTO students (first_name, last_name, email, enrollment_date) VALUES (%s, %s, %s, %s);", (first_name, last_name, email, enrollment_date))
 
-        conn.commit()
-        print("Student added successfully.\n")
+        print("Successfully Added Student.\n")
 
     except psycopg2.Error as error:
             conn.rollback()
             print(f"ERROR: {error}")
+
+def updateStudentEmail(conn, student_id, new_email):
+    """Update the email address for a student."""
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("UPDATE students SET email = %s WHERE student_id = %s", (new_email, student_id))
+
+        print("Successfully Updated Student Email.\n")
+
+    except psycopg2.Error as error:
+        conn.rollback()
+        print(f"ERROR: {error}")
 
 if __name__=="__main__":
     conn = None
@@ -47,6 +59,9 @@ if __name__=="__main__":
         getAllStudents(conn)
         addStudent(conn, 'Alice', 'Smith', 'alice.smith@email.com', '2023-08-25')
         getAllStudents(conn)
+        updateStudentEmail(conn, 1, "john.doe2@example.com")
+        getAllStudents(conn)
+
 
     except psycopg2.Error as error:
         print(f"ERROR: {error}")
