@@ -30,3 +30,6 @@ Open a terminal in the project directory and run:
 ```bash
 python src\main.py
 ```
+
+## Video Demo
+https://drive.google.com/file/d/174gm1zE6xEy8g5lvVyq6ThCS-AeDqWwa/view?usp=sharing

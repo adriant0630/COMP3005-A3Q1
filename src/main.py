@@ -102,19 +102,20 @@ if __name__=="__main__":
     conn = None
     try:
         conn=psycopg2.connect(
-            dbname="Assignment3Q1_DB",
-            user="postgres",
-            password="postgres",
-            host="localhost",
-            port="5432"
+            dbname="<DB NAME>",
+            user="<USER NAME>",
+            password="<PASSWORD>",
+            host="<HOST>",
+            port="<PORT>"
         )
 
-        initializeSchema(conn)
         getAllStudents(conn)
         addStudent(conn, 'Alice', 'Smith', 'alice.smith@email.com', '2023-08-25')
         getAllStudents(conn)
-
-
+        updateStudentEmail(conn, 1, "john.doe2@example.com")
+        getAllStudents(conn)
+        deleteStudent(conn, 3)
+        getAllStudents(conn)
 
     #catching errors
     except psycopg2.Error as error:
