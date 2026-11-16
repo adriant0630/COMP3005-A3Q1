@@ -5,8 +5,7 @@ import psycopg2
 def initializeSchema(conn):
     """Create the students table and insert the initial records."""
     #gets the file path
-    schema_file_path = Path(__file__).with_name("schemaInitialization.sql")
-
+    schema_file_path = Path(__file__).parent.parent / "database" / "schemaInitialization.sql"
     try:
         #gets the sql file's query
         initialization_query = schema_file_path.read_text(encoding="utf-8")
@@ -15,6 +14,7 @@ def initializeSchema(conn):
             #query
             cursor.execute(initialization_query)
 
+        conn.commit() #commits the changes onto your database UI (i.e. pgadmin)
         print("Successfully Initialized Database Schema.\n")
 
     #catching errors
@@ -56,6 +56,7 @@ def addStudent(conn, first_name, last_name, email, enrollment_date):
             #query
             cursor.execute("INSERT INTO students (first_name, last_name, email, enrollment_date) VALUES (%s, %s, %s, %s);", (first_name, last_name, email, enrollment_date))
 
+        conn.commit() #commits the changes onto your database UI (i.e. pgadmin)
         print("Successfully Added Student.\n")
 
     #catching errors
@@ -71,6 +72,7 @@ def updateStudentEmail(conn, student_id, new_email):
             #query
             cursor.execute("UPDATE students SET email = %s WHERE student_id = %s", (new_email, student_id))
 
+        conn.commit() #commits the changes onto your database UI (i.e. pgadmin)
         print("Successfully Updated Student Email.\n")
 
     #catching errors
@@ -86,6 +88,7 @@ def deleteStudent(conn, student_id):
             #query
             cursor.execute("DELETE FROM students WHERE student_id = %s", (student_id,))
 
+        conn.commit() #commits the changes onto your database UI (i.e. pgadmin)
         print("Successfully Deleted Student.\n")
 
     #catching errors
@@ -110,10 +113,8 @@ if __name__=="__main__":
         getAllStudents(conn)
         addStudent(conn, 'Alice', 'Smith', 'alice.smith@email.com', '2023-08-25')
         getAllStudents(conn)
-        updateStudentEmail(conn, 1, "john.doe2@example.com")
-        getAllStudents(conn)
-        deleteStudent(conn, 3)
-        getAllStudents(conn)
+
+
 
     #catching errors
     except psycopg2.Error as error:
